@@ -1,32 +1,32 @@
-## 1. The Interface
+# 1. The Interface
 
 The terminal is split into three distinctive panels:
 
-### Top Left: The Process Queue
+## Top Left: The Process Queue
 
 Shows your incoming tickets with a countdown timer (TTL)\
 Example: `[PID xxx] GET /Burger (TTL: 15s)`
 
-### Top Right: The RAM Sticky-Notes
+## Top Right: The RAM Sticky-Notes
 
 This acts as your inventory. \
 You have 4 slots of memory. \
 Shows what ingredients are currently loaded and ready to use. \
 Example: `[0x01]: Patty, [0x02]: Bun, [0x03]: <EMPTY>, [0x04]: <EMPTY>`.
 
-### Bottom: The Terminal
+## Bottom: The Terminal
 
 To actually progress through orders and call commands, use the terminal \
 Example: `{USER}@kernelkitchen:~$ ls pantry`
 
-## 2. The Flow
+# 2. The Flow
 
-### Requests
+## Requests
 
 Start with getting an order in the Process Queue \
 If your queue is full (greater than 5 pending orders), then the kitchen crashes!
 
-### Fetching
+## Fetching
 
 Ingredients live on the Disk. You don't have them yet. \
 You need to fetch the disk so that you can load it into your RAM \
@@ -35,22 +35,22 @@ You need to fetch the disk so that you can load it into your RAM \
 While fetching, you cannot type in your terminal. Make your actions count. \
 A progress bar will be shown for your convenience for the first couple rounds. As the difficulty increases, your keyboard will unlock, but you are blocked from execution.
 
-### Management
+## Management
 
 Once fetched, it appears in your RAM. \
 Since you only have 4 slots, you must be careful not to go over your inventory space.
 - If you try to `fetch` when your RAM is full -> **Stack Overflow Error** 
   - Stack Overflow Errors result in a loss of 5 seconds of your controls while the system reboots.
   - You must `free` items to make space if you fetched the wrong thing.
-  
-### Compiling 
+
+## Compiling 
 
 This is where you actually start cooking \n
 To finish and order, you use the `compile` command with the Order ID for that process. \
 The game doesn't automatically check if the exact required ingredients are in your RAM... \
 The compilation processes checks one by one to see if you have the required ingredients.
 
-### Checking
+## Checking
 
 Two things can happen when you're compiling:
 - *Correct*: Everything works ok! You have everything, the order disappears, you gain Score (Uptime), and the ingredients are removed from RAM automatically

@@ -35,6 +35,13 @@ You need to fetch the disk so that you can load it into your RAM \
 While fetching, you cannot type in your terminal. Make your actions count. \
 A progress bar will be shown for your convenience for the first couple rounds. As the difficulty increases, your keyboard will unlock, but you are blocked from execution.
 
+## Processing
+
+Some recipies required cooked ingredients (e.g., a Burger needs a `COOKED` Patty, not a `RAW` one).
+You must cook it via tha `make` command and the target address (e.g., `make 0x01`)
+It takes 2 seconds for you to cook sometime, and it transitions between `RAW` -> `COOKED`
+*Warning*: If you `make` something that is already `COOKED`, it becomes `BURNT` (and unusable)
+
 ## Management
 
 Once fetched, it appears in your RAM. \
@@ -85,6 +92,8 @@ These are commands the player needs to memorize and control the flow of the game
 | `free`    | `free [address]` |                                                   Manually deletes an item from a specific RAM slot (e.g., `free 0x01`) |
 | `gc`      |  `gc [address]`  |                                                The Manual Garbage Collector TM. Clears the corrupted RAM from that slot |
 | `man`     |   `man [dish]`   | The Good 'Ol Manual TM. Shows the recipie (dependencies) for a dish. (e.g, `man burger` -> Dependencies: `Bun`, `Patty` |
+| `make`    | `make [address]` |                    Transition your food states it just under two seconds! Transitions from `RAW` -> `COOKED` -> `BURNT` |
+
 
 # 5. Difficulty Progression
 

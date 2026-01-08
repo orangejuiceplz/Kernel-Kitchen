@@ -42,6 +42,14 @@ public class Order {
         this.isCritical = isCritical;
     }
 
+    /**
+     *
+     * Updates the time remaining on an order
+     *
+     *
+     * @param millisPassed
+     * How much milliseconds has passed
+     */
     public void tick(long millisPassed) {
         this.timeRemaining -= millisPassed;
     }
@@ -62,7 +70,7 @@ public class Order {
         return this.isCritical;
     }
 
-    // ---------------- UI
+    // ---------------- LATER UI
 
     public long getTimeRemaining() {
         return this.timeRemaining;

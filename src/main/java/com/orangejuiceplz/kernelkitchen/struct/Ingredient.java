@@ -31,11 +31,25 @@ public class Ingredient {
     private final String name;
     private IngredientState state;
 
+
+    /**
+     *
+     * @param name The name of the specific ingredient (e.g., PATTY)
+     *
+     * @param state The current state of the ingredient. Either RAW, COOKED, or BURNT.
+     */
     public Ingredient(String name, IngredientState state) {
         this.name = name;
         this.state = state;
     }
 
+
+    /**
+     *
+     * @param name Name of the ingredient to add.
+     *
+     * Default constructor for when slotting ingredients into RAM. Assumes the "RAW" state
+     */
     public Ingredient(String name) {
         this.name = name;
         this.state = IngredientState.RAW;
@@ -53,6 +67,17 @@ public class Ingredient {
         this.state = state;
     }
 
+
+    /**
+     *
+     * Checks equality between two Ingredients
+     *
+     * @param object
+     * {@code Ingredient}object to compare
+     *
+     * @return
+     * If this Ingredient object equals {@code object} 's name and state.
+     */
     @Override
     public boolean equals (Object object) {
         if (this == object) return true;

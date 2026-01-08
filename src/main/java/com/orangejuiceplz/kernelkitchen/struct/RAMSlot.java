@@ -31,8 +31,15 @@ public class RAMSlot {
     private Ingredient content;
     private boolean isCorrupted;
     private long timeLoaded; // measured in ms from when the ingredient was added
-    private final String hexAddress; // this NEVER changes
+    private final String hexAddress;
 
+    /**
+     *
+     * Creates a base {@code RAMSlot} object
+     *
+     * @param hexAddress Hex Address to pass in. Either "0x01, 0x02, 0x03, 0x04"
+     *
+     */
     public RAMSlot(String hexAddress) {
         this.content = null;
         this.isCorrupted = false;
@@ -59,7 +66,7 @@ public class RAMSlot {
     }
 
     public boolean isEmpty() {
-        return this.content == null; // this means nothing is loaded!
+        return this.content == null; // this means nothing is specifically populated in that RAM slot
     }
 
     public Ingredient getContent() {

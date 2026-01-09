@@ -71,7 +71,7 @@ public class GameState {
 
         Order order = new Order(pid, targetDish, 15000, shouldWeMakeThemCritical);
 
-        if (orders.size() == 5) {
+        if (orders.size() >= 5) {
             systemIntegrity = 0;
             systemStatus = "QUEUE OVERFLOW";
             return;
@@ -144,6 +144,13 @@ public class GameState {
             }
         }
 
+    }
+
+    public int getSystemIntegrity() {
+        return this.systemIntegrity;
+    }
+    public long getUptimeScore() {
+        return this.uptimeScore;
     }
 
     static void main() {

@@ -26,7 +26,6 @@ import com.orangejuiceplz.kernelkitchen.struct.Order;
 import com.orangejuiceplz.kernelkitchen.struct.RAMSlot;
 import com.orangejuiceplz.kernelkitchen.struct.RecipeBook;
 
-import java.sql.SQLOutput;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -63,7 +62,7 @@ public class GameState {
 
         boolean shouldWeMakeThemCritical = rand.nextDouble() < 0.10;
 
-        int pid = -1;
+        int pid;
         if (shouldWeMakeThemCritical) {
             pid = rand.nextInt(0, 100);
         } else {
@@ -147,7 +146,7 @@ public class GameState {
 
     }
 
-    public static void main(String[] args) {
+    static void main() {
         GameState state = new GameState();
         state.printStatus();
         long simulatingSeconds = (int) (Math.random() * 31) + 1;

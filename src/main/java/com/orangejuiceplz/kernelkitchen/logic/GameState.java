@@ -26,6 +26,7 @@ import com.orangejuiceplz.kernelkitchen.struct.Order;
 import com.orangejuiceplz.kernelkitchen.struct.RAMSlot;
 import com.orangejuiceplz.kernelkitchen.struct.RecipeBook;
 
+import java.sql.SQLOutput;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -37,6 +38,7 @@ public class GameState {
     private int systemIntegrity; // 0 - 100
     private long uptimeScore; // seconds alive
     private long lockoutTimer = 0; // > 0 means player cannot type due to stack overflow or processes running
+    private long accumulator;
     private String systemStatus = "IDLE"; // ui stuff
 
     private final Random rand = new Random();
@@ -44,8 +46,8 @@ public class GameState {
     public GameState() {
 
         this.ram = new RAMSlot[4];
-        for (int i = 0; i < ram.length; i++) {
-            ram[i] = new RAMSlot("0x0" + (i + 1));
+        for (int i = 0; i < this.ram.length; i++) {
+            this.ram[i] = new RAMSlot("0x0" + (i + 1));
         }
         this.orders = new LinkedList<>();
         this.systemIntegrity = 100;
@@ -72,18 +74,19 @@ public class GameState {
 
         if (orders.size() == 5) {
             systemIntegrity = 0;
+            systemStatus = "QUEUE OVERFLOW";
             return;
         } else {
             this.orders.add(order);
         }
 
-        System.out.println("A new process spawned!"); // DEBUGGING/LOGGING FOR NOW SINCE NOT USING LANTERNA FOR NOW
+        System.out.println("A new process spawned: " + targetDish); // DEBUGGING/LOGGING FOR NOW SINCE NOT USING LANTERNA FOR NOW
 
     }
 
     public void printStatus() {
         System.out.println("--- SYSTEM STATUS ---");
-        System.out.println("Integrity " + systemIntegrity + "% | Uptime " + uptimeScore );
+        System.out.println("Status: [" + systemStatus + "] | Integrity:  " + systemIntegrity + "% | Uptime " + uptimeScore );
         System.out.println("--- RAM DUMP ---");
         for (RAMSlot slot : this.ram) {
                 System.out.println(slot);
@@ -94,8 +97,62 @@ public class GameState {
         }
     }
 
+    public void tick(long millisPassed) {
+
+        this.accumulator += millisPassed;
+
+        if (this.accumulator >= 1000) {
+            long secondsGained = this.accumulator / 1000;
+            this.uptimeScore += secondsGained;
+            this.uptimeScore %= 1000;
+        }
+
+        if (this.lockoutTimer > 0) {
+            this.lockoutTimer -= millisPassed;
+            if (this.lockoutTimer <= 0) {
+                this.lockoutTimer = 0;
+                this.systemStatus = "IDLE";
+            }
+        }
+
+
+
+        var iterator = orders.iterator();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
+            order.tick(millisPassed);
+
+            if (order.isExpired()) {
+                iterator.remove();
+
+                if (order.isCritical()) {
+                    this.systemIntegrity = 0;
+                    this.systemStatus = "PANIC";
+                } else {
+                    this.systemIntegrity -= 15;
+                    if (this.systemIntegrity < 0) this.systemIntegrity = 0;
+                }
+
+            }
+        }
+
+        long currentTime = System.currentTimeMillis();
+        for (RAMSlot slot : this.ram) {
+            if (!slot.isEmpty() && !slot.isCorrupted()) {
+                if (currentTime - slot.getTimeLoaded() > 20000) {
+                    slot.markCorrupted();
+                }
+            }
+        }
+
+    }
+
     public static void main(String[] args) {
         GameState state = new GameState();
+        state.printStatus();
+        long simulatingSeconds = (int) (Math.random() * 31) + 1;
+        System.out.println("\n... simulating " + simulatingSeconds +" seconds ...");
+        state.tick(simulatingSeconds * 1000);
         state.printStatus();
     }
 

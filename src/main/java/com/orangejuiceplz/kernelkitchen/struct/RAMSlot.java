@@ -85,6 +85,25 @@ public class RAMSlot {
         return hexAddress;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("[").append(this.hexAddress).append("]: ");
+
+        if (this.isEmpty()) {
+            sb.append("<EMPTY>");
+        } else {
+            sb.append(this.content.toString());
+
+            if (this.isCorrupted()) {
+                sb.append(" [CORRUPTED]");
+            }
+
+        }
+        return sb.toString();
+    }
+
 
 
 }

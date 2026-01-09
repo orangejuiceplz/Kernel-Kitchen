@@ -104,7 +104,7 @@ public class GameState {
         if (this.accumulator >= 1000) {
             long secondsGained = this.accumulator / 1000;
             this.uptimeScore += secondsGained;
-            this.uptimeScore %= 1000;
+            this.accumulator %= 1000;
         }
 
         if (this.lockoutTimer > 0) {

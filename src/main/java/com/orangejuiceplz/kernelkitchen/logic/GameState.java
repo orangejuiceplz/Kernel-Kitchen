@@ -164,6 +164,15 @@ public class GameState {
         return false;
     }
 
+    public RAMSlot getSlot(String address) {
+        for (RAMSlot slot : this.ram) {
+            if (slot.getHexAddress().equalsIgnoreCase(address)) {
+                return slot;
+            }
+        }
+        return null;
+    }
+
     public void setLockout(long millis) {
         this.lockoutTimer = millis;
         this.systemStatus = "TERMINAL BUSY - PLEASE WAIT";

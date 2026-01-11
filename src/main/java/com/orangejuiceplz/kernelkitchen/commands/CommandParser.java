@@ -22,6 +22,9 @@
 
 package com.orangejuiceplz.kernelkitchen.commands;
 
+import com.orangejuiceplz.kernelkitchen.commands.impl.compile;
+import com.orangejuiceplz.kernelkitchen.commands.impl.fetch;
+import com.orangejuiceplz.kernelkitchen.commands.impl.make;
 import com.orangejuiceplz.kernelkitchen.logic.GameState;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +39,11 @@ public class CommandParser {
 
         // TODO:
         // put commands here
+
+        commands.put("fetch", new fetch());
+        commands.put("make", new make());
+        commands.put("compile", new compile());
+        commands.put("gc", new gc());
 
     }
 

@@ -22,5 +22,59 @@
 
 package com.orangejuiceplz.kernelkitchen.commands.impl;
 
-public class compile {
+import com.orangejuiceplz.kernelkitchen.commands.Command;
+import com.orangejuiceplz.kernelkitchen.commands.CommandResult;
+import com.orangejuiceplz.kernelkitchen.logic.GameState;
+import com.orangejuiceplz.kernelkitchen.struct.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class compile implements Command {
+
+    @Override
+    public CommandResult execute(GameState state, List<String> args) {
+
+        if (args.isEmpty()) {
+            return new CommandResult(false, "Usage: compile [PID]");
+        }
+
+        int pid;
+        try {
+            pid = Integer.parseInt(args.getFirst());
+        } catch (NumberFormatException e) {
+            return new CommandResult(false, "Error: PID must be an integer");
+        }
+
+        Order order = state.getOrder(pid);
+        if (order == null) {
+            return new CommandResult(false, "OrderNotFoundException with PID: "
+                    + pid + ". Order does not exist");
+        }
+
+        Recipe recipe = RecipeBook.getRecipe(order.getDishName());
+        if (recipe == null) {
+            return new CommandResult(false, "Recipe corrupted or missing for " + order.getDishName());
+        }
+
+        List<RAMSlot> loadedRAM = new ArrayList<>();
+
+        for (Ingredient required : recipe.getIngredientList()) {
+            RAMSlot foundSlot = state.findIngredientInRAM(required, loadedRAM);
+
+            if (foundSlot == null) {
+                state.penalize(10);
+                return new CommandResult(false, "Compilation Error: Missing Dependency [" + required.toString() + "]" );
+            }
+        }
+
+        for (RAMSlot slot : loadedRAM) {
+            slot.clear();
+        }
+
+        state.completeOrder(order);
+        return new CommandResult(true, "SUCCESS: Compiled order " + order.getDishName() + " for PID " + pid);
+
+    }
+
 }

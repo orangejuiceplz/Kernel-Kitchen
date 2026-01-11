@@ -28,6 +28,7 @@ import com.orangejuiceplz.kernelkitchen.struct.RAMSlot;
 import com.orangejuiceplz.kernelkitchen.struct.RecipeBook;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -176,6 +177,38 @@ public class GameState {
     public void setLockout(long millis) {
         this.lockoutTimer = millis;
         this.systemStatus = "TERMINAL BUSY - PLEASE WAIT";
+    }
+
+    public Order getOrder(int pid) {
+        for (Order order : this.orders) {
+            if (order.getPID() == pid) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public void completeOrder(Order order) {
+        this.orders.remove(order);
+
+        this.systemIntegrity = Math.min(100, this.systemIntegrity + 15);
+        this.systemStatus = "ORDER SERVED: 200 OK";
+    }
+
+    public void penalize(int amount) {
+        this.systemIntegrity -= amount;
+        if (this.systemIntegrity < 0) this.systemIntegrity = 0;
+    }
+
+    public RAMSlot findIngredientInRAM(Ingredient target, List<RAMSlot> ignoreList) { // java.util.List<RAMSlot> ignoreList?
+        for (RAMSlot slot : this.ram) {
+            if (!slot.isEmpty() && !slot.isCorrupted() && !ignoreList.contains(slot)) {
+                if (slot.getContent().equals(target)) {
+                    return slot;
+                }
+            }
+        }
+        return null;
     }
 
 

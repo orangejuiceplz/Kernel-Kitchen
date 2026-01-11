@@ -22,5 +22,41 @@
 
 package com.orangejuiceplz.kernelkitchen.commands.impl;
 
-public class gc {
+import com.orangejuiceplz.kernelkitchen.commands.Command;
+import com.orangejuiceplz.kernelkitchen.commands.CommandResult;
+import com.orangejuiceplz.kernelkitchen.logic.GameState;
+import com.orangejuiceplz.kernelkitchen.struct.RAMSlot;
+
+import java.util.List;
+
+
+public class gc implements Command {
+
+    @Override
+    public CommandResult execute(GameState state, List<String> args) {
+
+        if (args.isEmpty()) {
+            return new CommandResult(false, "Usage: gc [address]");
+        }
+
+        String address = args.getFirst();
+        RAMSlot slot = state.getSlot(address);
+
+        if (slot == null) {
+            return new CommandResult(false, "Segmentation Fault: Invalid address at " + address);
+        }
+
+        if(slot.isCorrupted()) {
+            slot.clear();
+            return new CommandResult(true, "Successfully garbaged collected bad memory. Freeing automatically.");
+        } else if (slot.isEmpty()) {
+            return new CommandResult(false, "Segmentation Fault: Address does not contain any memory. There is nothing to collect");
+        } else {
+            slot.clear();
+            return new CommandResult(false, "Warning: Garbage collecting uncorrupted memory will lead to unexpected behavior. For valid data, use 'free' ");
+            // we're going to penalize for this
+        }
+
+    }
+
 }

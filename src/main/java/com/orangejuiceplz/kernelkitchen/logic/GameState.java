@@ -22,6 +22,7 @@
 
 package com.orangejuiceplz.kernelkitchen.logic;
 
+import com.orangejuiceplz.kernelkitchen.struct.Ingredient;
 import com.orangejuiceplz.kernelkitchen.struct.Order;
 import com.orangejuiceplz.kernelkitchen.struct.RAMSlot;
 import com.orangejuiceplz.kernelkitchen.struct.RecipeBook;
@@ -153,13 +154,19 @@ public class GameState {
         return this.uptimeScore;
     }
 
-    static void main() {
-        GameState state = new GameState();
-        state.printStatus();
-        long simulatingSeconds = (int) (Math.random() * 31) + 1;
-        System.out.println("\n... simulating " + simulatingSeconds +" seconds ...");
-        state.tick(simulatingSeconds * 1000);
-        state.printStatus();
+    public boolean loadToRAM(Ingredient ingredient) {
+        for (RAMSlot slot: this.ram) {
+            if (slot.isEmpty()) {
+                slot.load(ingredient);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setLockout(long millis) {
+        this.lockoutTimer = millis;
+        this.systemStatus = "TERMINAL BUSY - PLEASE WAIT";
     }
 
 

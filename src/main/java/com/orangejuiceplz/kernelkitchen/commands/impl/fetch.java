@@ -22,5 +22,37 @@
 
 package com.orangejuiceplz.kernelkitchen.commands.impl;
 
-public class fetch {
+import com.orangejuiceplz.kernelkitchen.commands.Command;
+import com.orangejuiceplz.kernelkitchen.commands.CommandResult;
+import com.orangejuiceplz.kernelkitchen.logic.GameState;
+import com.orangejuiceplz.kernelkitchen.struct.Ingredient;
+
+import java.util.List;
+
+public class fetch implements Command {
+
+    @Override
+    public CommandResult execute(GameState state, List<String> args) {
+
+        if (args.isEmpty()) {
+            return new CommandResult(false, "Usage: fetch [ingredient_name]");
+        }
+
+        String ingredient = args.getFirst();
+
+        Ingredient itemToFetch = new Ingredient(ingredient);
+
+        boolean isLoaded = state.loadToRAM(itemToFetch);
+
+        if (isLoaded) {
+            state.setLockout(2000);
+            return new CommandResult(true, "Fetching " + ingredient + " from disk..."); // going to add a progress bar for the 2000ms
+        } else {
+            state.setLockout(5000);
+            return new CommandResult(false, "ERROR: STACK OVERFLOW. MEMORY FULL, REBOOTING SYSTEM");
+        }
+
+
+    }
+
 }

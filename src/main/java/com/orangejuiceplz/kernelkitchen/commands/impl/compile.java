@@ -66,6 +66,8 @@ public class compile implements Command {
                 state.penalize(10);
                 return new CommandResult(false, "Compilation Error: Missing Dependency [" + required.toString() + "]" );
             }
+
+            loadedRAM.add(foundSlot);
         }
 
         for (RAMSlot slot : loadedRAM) {

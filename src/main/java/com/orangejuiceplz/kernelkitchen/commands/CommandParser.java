@@ -44,6 +44,7 @@ public class CommandParser {
         commands.put("compile", new compile());
         commands.put("gc", new gc());
         commands.put("free", new free());
+        commands.put("man", new man());
 
     }
 
